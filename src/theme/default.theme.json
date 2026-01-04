@@ -1,0 +1,12 @@
+{
+  "name": "Default",
+  "colors": {
+    "text": "#111827",
+    "primary": "#2563eb",
+    "background": "#ffffff"
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "baseFontSize": "16px"
+  }
+}

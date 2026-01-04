@@ -1,25 +1,49 @@
 import { BasesNode } from '../schema/basesNode';
 import { Droppable } from '../../canvas/Droppable';
-import { useEditorStore } from '../../editor/useEditorStore';
+import { applyStyles } from '../style-engine/applyStyles';
 
 export const RenderNode = ({ node }: { node: BasesNode }) => {
-  const { selectedId, selectNode } = useEditorStore();
-  const isSelected = selectedId === node.id;
+  const styleVars = applyStyles(node.styles);
 
-  const content = (
-    <div
-      onClick={e => {
-        e.stopPropagation();
-        selectNode(node.id);
-      }}
-      style={{
-        outline: isSelected ? '2px solid #2563eb' : 'none',
-        padding: 4,
-      }}
-    >
-      {/* existing switch logic */}
-    </div>
-  );
+  const content = (() => {
+    switch (node.type) {
+      case 'text':
+        return (
+          <p
+            style={{
+              ...styleVars,
+              color: 'var(--vb-color-text)',
+              fontSize: 'var(--vb-font-size-base)',
+              fontFamily: 'var(--vb-font-family)',
+            }}
+          >
+            force test
+            {node.props?.content}
+          </p>
+        );
+
+      case 'section':
+        return (
+          <section style={styleVars}>
+            {node.children?.map(c => (
+              <RenderNode key={c.id} node={c} />
+            ))}
+          </section>
+        );
+
+      case 'column':
+        return (
+          <div style={styleVars}>
+            {node.children?.map(c => (
+              <RenderNode key={c.id} node={c} />
+            ))}
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  })();
 
   return node.isContainer ? (
     <Droppable id={node.id}>{content}</Droppable>

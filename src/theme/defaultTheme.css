@@ -1,0 +1,14 @@
+:root {
+  --vb-color-text: #0554ff;
+  --vb-color-primary: #2563eb;
+  --vb-color-background: #ffffff;
+
+  --vb-font-family: Inter, system-ui, sans-serif;
+  --vb-font-size-base: 16px;
+
+  --vb-spacing-sm: 4px;
+  --vb-spacing-md: 8px;
+  --vb-spacing-lg: 16px;
+
+  --vb-border-radius: 6px;
+}

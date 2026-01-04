@@ -1,15 +1,18 @@
-import { useDroppable } from '@dnd-kit/core';
-import { RenderNode } from '../core-builder/renderer/renderNode';
 import { useEditorStore } from '../editor/useEditorStore';
+import { RenderNode } from '../core-builder/renderer/renderNode';
+import { applyGlobalStyles } from '../core-builder/style-engine/applyGlobalStyles';
 
 export const Canvas = () => {
   const { page } = useEditorStore();
-  const { setNodeRef } = useDroppable({ id: 'canvas' });
+  const globalVars = applyGlobalStyles(page.globalStyles);
 
   return (
     <div
-      ref={setNodeRef}
-      style={{ minHeight: 300, border: '2px dashed #aaa', padding: 16 }}
+      style={{
+        minHeight: 300,
+        padding: 16,
+        ...globalVars,
+      }}
     >
       {page.root.map(node => (
         <RenderNode key={node.id} node={node} />
