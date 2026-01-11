@@ -8,7 +8,10 @@ import './theme/defaultTheme.css';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
+const rootEl =
+  document.getElementById('vb-root') ||
+  document.getElementById('root');
+ReactDOM.createRoot(rootEl!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>

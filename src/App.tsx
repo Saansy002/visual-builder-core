@@ -35,6 +35,7 @@ function App() {
   });
 };
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() => {
   if (!page.globalStyles) {
     setPage({
@@ -43,6 +44,8 @@ useEffect(() => {
     });
   }
 }, []);
+
+
 
   return (
   <DndContext onDragEnd={handleDragEnd}>
