@@ -1,63 +1,25 @@
-import { DndContext } from '@dnd-kit/core';
-import { v4 as uuid } from 'uuid';
-import React, { useEffect } from 'react';
-import { Sidebar } from './sidebar/Sidebar';
-import { Canvas } from './canvas/Canvas';
-import { useEditorStore } from './editor/useEditorStore';
-import { BasesNode } from './core-builder/schema/basesNode';
-import { TreeView } from './tree/TreeView';
-import { SettingsPanel } from './settings/SettingsPanel';
-import { GlobalStylesPanel } from './settings/GlobalStylesPanel';
-import defaultTheme from './theme/default.theme.json';
-import { loadTheme } from './theme/loadTheme';
-import { HtmlExportButton } from './export/HtmlExportButton';
+import Canvas from "./canvas/Canvas";
+import { Sidebar } from "./sidebar/Sidebar";
+import { TreeView } from "./tree/TreeView";
+import { Inspector } from "./settings/Inspector";
+import { useEditorStore } from "./editor/useEditorStore";
+import { useKeyboardShortcuts } from "./editor/useKeyboardShortcuts";
 
-function App() {
-  const { page, setPage } = useEditorStore();
+export default function App() {
+  const undo = useEditorStore(s => s.undo);
+  const redo = useEditorStore(s => s.redo);
 
-  const handleDragEnd = (event: any) => {
-  const { active, over } = event;
-  if (!over || over.id !== 'canvas') return;
-
-  const isContainer = active.data.current.isContainer;
-
-  const newNode: BasesNode = {
-    id: uuid(),
-    type: active.data.current.type,
-    isContainer,
-    children: isContainer ? [] : undefined,
-    props: isContainer ? {} : { content: 'New Text' },
-  };
-
-  setPage({
-    ...page,
-    root: [...page.root, newNode],
-  });
-};
-
-// eslint-disable-next-line react-hooks/exhaustive-deps
-useEffect(() => {
-  if (!page.globalStyles) {
-    setPage({
-      ...page,
-      globalStyles: loadTheme(defaultTheme),
-    });
-  }
-}, []);
-
-
+  useKeyboardShortcuts();
 
   return (
-  <DndContext onDragEnd={handleDragEnd}>
-    <div style={{ display: 'flex', gap: 16 }}>
+    <div style={{ display: "flex", gap: 16 }}>
+      <button onClick={undo}>Undo</button>
+      <button onClick={redo}>Redo</button>
+
       <Sidebar />
       <Canvas />
       <TreeView />
-      <SettingsPanel />
-      <GlobalStylesPanel />
-      <HtmlExportButton />
+      <Inspector />
     </div>
-  </DndContext>
-);
+  );
 }
-export default App;

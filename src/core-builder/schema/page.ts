@@ -1,4 +1,4 @@
-import { BasesNode } from './basesNode';
+import { BaseNode } from './baseNode';
 
 export interface GlobalStyles {
   colorText?: string;
@@ -11,5 +11,9 @@ export interface GlobalStyles {
 export interface PageSchema {
   id: string;
   globalStyles?: GlobalStyles;
-  root: BasesNode[];
+  root: BaseNode[];
+}
+
+export interface PageNode extends BaseNode {
+  type: "page";
 }

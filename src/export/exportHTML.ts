@@ -1,6 +1,6 @@
-import { BasesNode } from '../core-builder/schema/basesNode';
+import { BaseNode } from '../core-builder/schema/baseNode';
 
-export const exportNodeToHTML = (node: BasesNode): string => {
+export const exportNodeToHTML = (node: BaseNode): string => {
   switch (node.type) {
     case 'section':
       return `
@@ -9,9 +9,9 @@ ${node.children?.map(exportNodeToHTML).join('') || ''}
 </section>
 `;
 
-    case 'column':
+    case 'container':
       return `
-<div class="vb-column">
+<div class="vb-container">
 ${node.children?.map(exportNodeToHTML).join('') || ''}
 </div>
 `;

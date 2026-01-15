@@ -1,5 +1,5 @@
 import { useEditorStore } from '../editor/useEditorStore';
-import { BasesNode } from '../core-builder/schema/basesNode';
+import { BaseNode } from '../core-builder/schema/baseNode';
 import { PropsEditor } from './PropsEditor';
 import { StyleEditor } from './StyleEditor';
 
@@ -12,7 +12,7 @@ export const SettingsPanel = () => {
     moveNode,
   } = useEditorStore();
 
-  const findNode = (nodes: BasesNode[]): BasesNode | undefined => {
+  const findNode = (nodes: BaseNode[]): BaseNode | undefined => {
     for (const node of nodes) {
       if (node.id === selectedId) return node;
       if (node.children) {

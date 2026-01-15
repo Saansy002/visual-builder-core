@@ -1,53 +1,59 @@
-import { BasesNode } from '../schema/basesNode';
-import { Droppable } from '../../canvas/Droppable';
-import { applyStyles } from '../style-engine/applyStyles';
+import { BaseNode } from '../schema/baseNode';
+import { useEditorStore } from "../../editor/useEditorStore";
+import { resolveStyles } from "../style-engine/resolveStyles";
+import { getWidget } from "../widgets/WidgetRegistry";
 
-export const RenderNode = ({ node }: { node: BasesNode }) => {
-  const styleVars = applyStyles(node.styles);
 
-  const content = (() => {
-    switch (node.type) {
-      case 'text':
-        return (
-          <p
-            style={{
-              ...styleVars,
-              color: 'var(--vb-color-text)',
-              fontSize: 'var(--vb-font-size-base)',
-              fontFamily: 'var(--vb-font-family)',
-            }}
-          >
-            force test
-            {node.props?.content}
-          </p>
-        );
+export const RenderNode = ({ node }: { node: BaseNode }) => {
+  const selectNode = useEditorStore(s => s.selectNode);
+  const selectedId = useEditorStore(s => s.selectedId);
 
-      case 'section':
-        return (
-          <section style={styleVars}>
-            {node.children?.map(c => (
-              <RenderNode key={c.id} node={c} />
-            ))}
-          </section>
-        );
+  const breakpoint = useEditorStore(s => s.breakpoint);
+  const style = resolveStyles(node.props.styles, breakpoint);
 
-      case 'column':
-        return (
-          <div style={styleVars}>
-            {node.children?.map(c => (
-              <RenderNode key={c.id} node={c} />
-            ))}
-          </div>
-        );
+  const isSelected = selectedId === node.id;
+  const wrapperStyle = {
+    outline: isSelected ? "2px solid #5b9cff" : "none",
+    cursor: "pointer"
+  };
 
-      default:
-        return null;
-    }
-  })();
+  switch (node.type) {
+     case "widget":
+      return (
+        <div
+          style={wrapperStyle}
+          onClick={e => {
+            e.stopPropagation();
+            selectNode(node.id);
+          }}
+        >
+          { /* widget render handled via registry */ }
+        </div>
+      );
+    case "section":
+    case "container":
+      return (
+        <div
+          style={wrapperStyle}
+          onClick={e => {
+            e.stopPropagation();
+            selectNode(node.id);
+          }}
+        >
+          {/* children rendering */}
+        </div>
+      );
 
-  return node.isContainer ? (
-    <Droppable id={node.id}>{content}</Droppable>
-  ) : (
-    content
-  );
+    default:
+      const widget = getWidget(node.props.widgetType);
+      if (!widget) return null;
+      return (
+        <div style={style}>
+          {widget.render(node)}
+        </div>
+      );
+  }
+
+  
 };
+

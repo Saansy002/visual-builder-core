@@ -1,35 +1,56 @@
-import { useEditorStore } from '../editor/useEditorStore';
-import { BasesNode } from '../core-builder/schema/basesNode';
+import { useEditorStore } from "../editor/useEditorStore";
+import { BaseNode } from "../core-builder/schema/baseNode";
 
-const STYLE_FIELDS = ['color', 'fontSize', 'margin', 'padding', 'background'];
+export const StyleEditor = ({ node }: { node: BaseNode }) => {
+  const updateNode = useEditorStore(s => s.updateNode);
+  const breakpoint = useEditorStore(s => s.breakpoint);
 
-export const StyleEditor = ({ node }: { node: BasesNode }) => {
-  const { updateNode } = useEditorStore();
-  const styles = node.styles?.desktop || {};
+  const styles = node.props.styles || {};
+  const current = styles[breakpoint] || {};
 
   return (
-    <>
-      <h5>Styles</h5>
-      {STYLE_FIELDS.map(field => (
-        <input
-          key={field}
-          placeholder={field}
-          value={styles[field] || ''}
-          style={{ width: '100%', marginBottom: 6 }}
-          onChange={e =>
-            updateNode(node.id, n => ({
-              ...n,
+    <div>
+      <h4>Style ({breakpoint})</h4>
+
+      <input
+        placeholder="Color"
+        value={current.color || ""}
+        onChange={e =>
+          updateNode(node.id, n => ({
+            ...n,
+            props: {
+              ...n.props,
               styles: {
-                ...n.styles,
-                desktop: {
-                  ...n.styles?.desktop,
-                  [field]: e.target.value,
-                },
-              },
-            }))
-          }
-        />
-      ))}
-    </>
+                ...styles,
+                [breakpoint]: {
+                  ...current,
+                  color: e.target.value
+                }
+              }
+            }
+          }))
+        }
+      />
+
+      <input
+        placeholder="Font Size"
+        value={current.fontSize || ""}
+        onChange={e =>
+          updateNode(node.id, n => ({
+            ...n,
+            props: {
+              ...n.props,
+              styles: {
+                ...styles,
+                [breakpoint]: {
+                  ...current,
+                  fontSize: e.target.value
+                }
+              }
+            }
+          }))
+        }
+      />
+    </div>
   );
 };

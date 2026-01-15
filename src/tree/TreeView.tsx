@@ -1,7 +1,7 @@
 import { useEditorStore } from '../editor/useEditorStore';
-import { BasesNode } from '../core-builder/schema/basesNode';
+import { BaseNode } from '../core-builder/schema/baseNode';
 
-const TreeItem = ({ node, level = 0 }: { node: BasesNode; level?: number }) => {
+const TreeItem = ({ node, level = 0 }: { node: BaseNode; level?: number }) => {
   const { selectedId, selectNode } = useEditorStore();
 
   return (
@@ -28,7 +28,7 @@ export const TreeView = () => {
   const { page } = useEditorStore();
 
   return (
-    <div style={{ width: 200 }}>
+    <div  style={{ width: 200 }}>
       <h4>Structure</h4>
       {page.root.map(node => (
         <TreeItem key={node.id} node={node} />

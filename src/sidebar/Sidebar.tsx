@@ -1,30 +1,23 @@
-import { useDraggable } from '@dnd-kit/core';
+import { getAllWidgets } from "../core-builder/widgets/WidgetRegistry";
 
-const Item = ({ type, isContainer }: any) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: type,
-    data: { type, isContainer },
-  });
+export const Sidebar = () => {
+  const widgets = getAllWidgets();
 
   return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={{ padding: 8, border: '1px solid #ccc', marginBottom: 4 }}
-    >
-      {type}
+    <div className="vb-sidebar">
+      {widgets.map(widget => (
+        <div
+          key={widget.type}
+          draggable
+          onDragStart={e => {
+            e.dataTransfer.setData("node-type", "widget");
+            e.dataTransfer.setData("widget-type", widget.type);
+          }}
+          className="vb-widget-item"
+        >
+          {widget.title}
+        </div>
+      ))}
     </div>
   );
 };
-
-export const Sidebar = () => (
-  <div style={{ width: 140 }}>
-    <h4>Layout</h4>
-    <Item type="section" isContainer />
-    <Item type="column" isContainer />
-
-    <h4>Widgets</h4>
-    <Item type="text" isContainer={false} />
-  </div>
-);

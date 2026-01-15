@@ -38,7 +38,7 @@ section {
   padding: var(${THEME_VARS.spacingLg});
 }
 
-.vb-column {
+.vb-container {
   padding: var(${THEME_VARS.spacingMd});
 }
 `.trim());
