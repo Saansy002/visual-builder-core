@@ -1,4 +1,4 @@
-import Canvas from "./canvas/Canvas";
+import Canvas from "./canvass/canvas";
 import { Sidebar } from "./sidebar/Sidebar";
 import { TreeView } from "./tree/TreeView";
 import { Inspector } from "./settings/Inspector";
@@ -17,7 +17,7 @@ export default function App() {
       <button onClick={redo}>Redo</button>
 
       <Sidebar />
-      <Canvas />
+      <Canvas nodes={[]} />
       <TreeView />
       <Inspector />
     </div>

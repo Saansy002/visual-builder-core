@@ -1,6 +1,6 @@
-import { BaseNode } from "../../core-builder/schema/baseNode";
+import { PageSchema } from "../../core-builder/schema/page";
 
 export interface Command {
-  execute(state: BaseNode): BaseNode;
-  undo(state: BaseNode): BaseNode;
+  execute(state: PageSchema): PageSchema;
+  undo(state: PageSchema): PageSchema;
 }

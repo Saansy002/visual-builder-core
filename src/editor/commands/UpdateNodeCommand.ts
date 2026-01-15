@@ -1,5 +1,6 @@
 import { Command } from "./Command";
 import { BaseNode } from "../../core-builder/schema/baseNode";
+import { PageSchema } from "../../core-builder/schema/page";
 
 export class UpdateNodeCommand implements Command {
   constructor(
@@ -8,22 +9,27 @@ export class UpdateNodeCommand implements Command {
     private next: BaseNode
   ) {}
 
-  execute(page: BaseNode): BaseNode {
-    return this.replace(page, this.next);
-  }
-
-  undo(page: BaseNode): BaseNode {
-    return this.replace(page, this.prev);
-  }
-
-  private replace(tree: BaseNode, node: BaseNode): BaseNode {
-    if (tree.id === node.id) return node;
-
+  execute(page: PageSchema): PageSchema {
     return {
-      ...tree,
-      children: tree.children.map(c =>
-        this.replace(c, node)
-      )
+      ...page,
+      root: this.replace(page.root, this.next)
     };
+  }
+
+  undo(page: PageSchema): PageSchema {
+    return {
+      ...page,
+      root: this.replace(page.root, this.prev)
+    };
+  }
+
+  private replace(tree: BaseNode[], node: BaseNode): BaseNode[] {
+    return tree.map(n => {
+      if (n.id === node.id) return node;
+      return {
+        ...n,
+        children: this.replace(n.children, node)
+      };
+    });
   }
 }

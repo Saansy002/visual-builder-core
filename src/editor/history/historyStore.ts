@@ -1,5 +1,5 @@
 import { Command } from "../commands/Command";
-import { BaseNode } from "../../core-builder/schema/baseNode";
+import { PageSchema } from "../../core-builder/schema/page";
 
 export interface HistoryState {
   past: Command[];
@@ -12,7 +12,7 @@ export const createHistory = (): HistoryState => ({
 });
 
 export function applyCommand(
-  page: BaseNode,
+  page: PageSchema,
   history: HistoryState,
   command: Command
 ) {
@@ -28,7 +28,7 @@ export function applyCommand(
 }
 
 export function undoCommand(
-  page: BaseNode,
+  page: PageSchema,
   history: HistoryState
 ) {
   const command = history.past.at(-1);
@@ -46,7 +46,7 @@ export function undoCommand(
 }
 
 export function redoCommand(
-  page: BaseNode,
+  page: PageSchema,
   history: HistoryState
 ) {
   const command = history.future[0];
